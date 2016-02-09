@@ -1,4 +1,5 @@
 var gulp = require('gulp');
+var karma = require('karma').server;
 
 var PATHS = {
     src: 'src/**/*.ts'
@@ -9,9 +10,16 @@ gulp.task('clean', function (done) {
     del(['dist'], done);
 });
 
-gulp.task('ts2js', function () {
+gulp.task('test', ['ts2js'], function(done) {
+    karma.start({
+        configFile: __dirname + '/karma.conf.js',
+        singleRun: true
+    });
+});
+
+gulp.task('ts2js', ['clean'], function () {
     var typescript = require('gulp-typescript');
-    var tscConfig = require('./tsconfig.json');
+    var tscConfig = require('./src/tsconfig.json');
 
     var tsResult = gulp
         .src(PATHS.src)
