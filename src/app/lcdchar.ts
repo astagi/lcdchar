@@ -1,7 +1,5 @@
 import {Component} from 'angular2/core';
-import {View} from 'angular2/core';
-
-import {PixelSwitch} from './pixel_switch';
+import {PixelSwitch} from '../components/pixel-switch';
 
 
 @Component({
