@@ -1,6 +1,6 @@
 # lcdchar
 
-Create custom chars for LCD displays! Built on top of AngularJS 2
+Create custom chars for LCD displays! Built on top of Angular 2
 
 ## Install
 
