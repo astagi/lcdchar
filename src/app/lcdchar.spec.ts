@@ -13,7 +13,7 @@ describe('LcdCharApp', () => {
   });
 
   it('should have name property', function() {
-    expect(app.pixels[0]).toBe(false);
+    expect(app.pixels[0].value).toBe(false);
   });
 
 });

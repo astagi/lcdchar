@@ -1,5 +1,6 @@
 import {Component} from 'angular2/core';
 import {PixelSwitch} from '../components/pixel-switch';
+import {Pixel} from '../models/pixel';
 
 
 @Component({
@@ -7,8 +8,10 @@ import {PixelSwitch} from '../components/pixel-switch';
   directives: [PixelSwitch],
   template: `
     <pixel-switch *ngFor="#pixel of pixels" [pixel]="pixel"></pixel-switch>
+    <div *ngFor="#pixel of pixels">{{pixel.value}}</div>
+
   `
 })
 export class LcdCharApp {
-  pixels: boolean[] = [false, true, false];
+    pixels: Pixel[] = [new Pixel(false), new Pixel(false), new Pixel(false)];
 }
