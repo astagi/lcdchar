@@ -1,4 +1,4 @@
-/// <reference path="../../typings/jasmine/jasmine.d.ts" />
+/// <reference path="../../typings/main.d.ts" />
 
 
 import {it, describe, expect, beforeEach, inject} from 'angular2/testing';
