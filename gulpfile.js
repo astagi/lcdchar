@@ -19,7 +19,7 @@ gulp.task('test', ['ts2js'], function(done) {
 
 gulp.task('ts2js', ['clean'], function () {
     var typescript = require('gulp-typescript');
-    var tscConfig = require('./src/tsconfig.json');
+    var tscConfig = require('./tsconfig.json');
 
     var tsResult = gulp
         .src(PATHS.src)
