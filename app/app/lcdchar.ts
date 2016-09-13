@@ -1,17 +1,16 @@
-import {Component} from 'angular2/core';
+import { Component } from '@angular/core';
 import {PixelSwitch} from '../components/pixel-switch';
 import {Pixel} from '../models/pixel';
 
 
 @Component({
   selector: 'lcdchar-app',
-  directives: [PixelSwitch],
   template: `
-    <pixel-switch *ngFor="#pixel of pixels" [pixel]="pixel"></pixel-switch>
-    <div *ngFor="#pixel of pixels">{{pixel.value}}</div>
+    <pixel-switch *ngFor="let pixel of pixels" [pixel]="pixel"></pixel-switch>
+    <div *ngFor="let pixel of pixels">{{pixel.value}}</div>
 
   `
 })
-export class LcdCharApp {
+export class LcdChar {
     pixels: Pixel[] = [new Pixel(false), new Pixel(false), new Pixel(false)];
 }

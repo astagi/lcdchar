@@ -1,65 +1,91 @@
 module.exports = function(config) {
-    config.set({
 
-        basePath: '.',
+  var appBase   = 'app/';      // transpiled app JS files
+  var appAssets ='/base/app/'; // component assets fetched by Angular's compiler
 
-        frameworks: ['jasmine'],
+  config.set({
+    basePath: '',
+    frameworks: ['jasmine'],
+    plugins: [
+      require('karma-jasmine'),
+      require('karma-chrome-launcher'),
+      require('karma-htmlfile-reporter')
+    ],
 
-        files: [
-            // paths loaded by Karma
-            {pattern: 'node_modules/angular2/bundles/angular2-polyfills.js', included: true, watched: true},
-            {pattern: 'node_modules/systemjs/dist/system.src.js', included: true, watched: true},
-            {pattern: 'node_modules/rxjs/bundles/Rx.js', included: true, watched: true},
-            {pattern: 'node_modules/angular2/bundles/angular2.dev.js', included: true, watched: true},
-            {pattern: 'node_modules/angular2/bundles/testing.dev.js', included: true, watched: true},
-            {pattern: 'karma-test-shim.js', included: true, watched: true},
+    customLaunchers: {
+      // From the CLI. Not used here but interesting
+      // chrome setup for travis CI using chromium
+      Chrome_travis_ci: {
+        base: 'Chrome',
+        flags: ['--no-sandbox']
+      }
+    },
+    files: [
+      // System.js for module loading
+      'node_modules/systemjs/dist/system.src.js',
 
-            // paths loaded via module imports
-            {pattern: 'dist/**/*.js', included: false, watched: true},
+      // Polyfills
+      'node_modules/core-js/client/shim.js',
 
-            // paths to support debugging with source maps in dev tools
-            {pattern: 'src/**/*.ts', included: false, watched: false},
-            {pattern: 'dist/**/*.js.map', included: false, watched: false}
-        ],
+      // Reflect and Zone.js
+      'node_modules/reflect-metadata/Reflect.js',
+      'node_modules/zone.js/dist/zone.js',
+      'node_modules/zone.js/dist/long-stack-trace-zone.js',
+      'node_modules/zone.js/dist/proxy.js',
+      'node_modules/zone.js/dist/sync-test.js',
+      'node_modules/zone.js/dist/jasmine-patch.js',
+      'node_modules/zone.js/dist/async-test.js',
+      'node_modules/zone.js/dist/fake-async-test.js',
 
-        // proxied base paths
-        proxies: {
-            // required for component assests fetched by Angular's compiler
-            '/src/': '/base/src/'
-        },
+      // RxJs.
+      { pattern: 'node_modules/rxjs/**/*.js', included: false, watched: false },
+      { pattern: 'node_modules/rxjs/**/*.js.map', included: false, watched: false },
 
-        port: 9876,
+      // Angular 2 itself and the testing library
+      {pattern: 'node_modules/@angular/**/*.js', included: false, watched: false},
+      {pattern: 'node_modules/@angular/**/*.js.map', included: false, watched: false},
 
-        logLevel: config.LOG_INFO,
+      {pattern: 'systemjs.config.js', included: false, watched: false},
+      'karma-test-shim.js',
 
-        colors: true,
+      // transpiled application & spec code paths loaded via module imports
+      {pattern: appBase + '**/*.js', included: false, watched: true},
 
-        autoWatch: true,
+      // asset (HTML & CSS) paths loaded via Angular's component compiler
+      // (these paths need to be rewritten, see proxies section)
+      {pattern: appBase + '**/*.html', included: false, watched: true},
+      {pattern: appBase + '**/*.css', included: false, watched: true},
 
-        browsers: ['Chrome'],
+      // paths for debugging with source maps in dev tools
+      {pattern: appBase + '**/*.ts', included: false, watched: false},
+      {pattern: appBase + '**/*.js.map', included: false, watched: false}
+    ],
 
-        // Karma plugins loaded
-        plugins: [
-            'karma-jasmine',
-            'karma-coverage',
-            'karma-chrome-launcher'
-        ],
+    // proxied base paths for loading assets
+    proxies: {
+      // required for component assets fetched by Angular's compiler
+      "/app/": appAssets
+    },
 
-        // Coverage reporter generates the coverage
-        reporters: ['progress', 'dots', 'coverage'],
+    exclude: [],
+    preprocessors: {},
+    reporters: ['progress', 'html'],
 
-        // Source files that you wanna generate coverage for.
-        // Do not include tests or libraries (these files will be instrumented by Istanbul)
-        preprocessors: {
-            'dist/**/!(*spec).js': ['coverage']
-        },
+    // HtmlReporter configuration
+    htmlReporter: {
+      // Open this file to see results in browser
+      outputFile: '_test-output/tests.html',
 
-        coverageReporter: {
-            reporters:[
-                {type: 'json', subdir: '.', file: 'coverage-final.json'}
-            ]
-        },
+      // Optional
+      pageTitle: 'Unit Tests',
+      subPageTitle: __dirname
+    },
 
-        singleRun: true
-    })
-};
+    port: 9876,
+    colors: true,
+    logLevel: config.LOG_INFO,
+    autoWatch: true,
+    browsers: ['Chrome'],
+    singleRun: false
+  })
+}
